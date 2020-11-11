@@ -33,7 +33,8 @@ def scrape(words, form_date, to_date, numtweet, db):
     # We are using .Cursor() to search through twitter for the required tweets.
     # The number of tweets can be restricted using .items(number of tweets)
     tweets = tweepy.Cursor(api.search_full_archive, query=words,
-                           fromDate=from_date, toDate=to_date, environment_name="dev").items(numtweet)
+                           fromDate=from_date, toDate=to_date, environment_name="dev", wait_on_rate_limit=True,
+                           wait_on_rate_limit_notify=True).items(numtweet)
 
     # .Cursor() returns an iterable object. Each item in
     # the iterator has various attributes that you can access to
@@ -63,7 +64,9 @@ def scrape(words, form_date, to_date, numtweet, db):
         # Here we are appending all the extracted information in the DataFrame
         ith_tweet = [username, description, location, following,
                      followers, totaltweets, retweetcount, text, hashtext, created_at]
-        db.loc[len(db)] = ith_tweet
+        db.append(ith_tweet)
+        # db.loc[len(db)] = ith_tweet
+
 
         # Function call to print tweet data on screen
         printtweetdata(i, ith_tweet)
