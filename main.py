@@ -1,4 +1,6 @@
 # import modules
+import datetime
+
 import pandas as pd
 import tweepy
 
@@ -18,17 +20,15 @@ def printtweetdata(n, ith_tweet):
     print(f"Hashtags Used:{ith_tweet[8]}")
     print(f"Created at:{ith_tweet[9]}")
 
-def checkForHashtag(tweet):
 
+def checkForHashtag(tweet):
     if 'worldcup2018' in tweet[8]:
         print('contains hashtag')
 
 
 # function to perform data extraction
-def scrape(words, form_date, to_date, numtweet):
-    # Creating DataFrame using pandas
-    db = pd.DataFrame(columns=['username', 'description', 'location', 'following',
-                               'followers', 'totaltweets', 'retweetcount', 'text', 'hashtags', 'created_at'])
+def scrape(words, form_date, to_date, numtweet, db):
+
 
     # We are using .Cursor() to search through twitter for the required tweets.
     # The number of tweets can be restricted using .items(number of tweets)
@@ -69,10 +69,9 @@ def scrape(words, form_date, to_date, numtweet):
         printtweetdata(i, ith_tweet)
         checkForHashtag(ith_tweet)
         i = i + 1
-    filename = 'scraped_tweets.csv'
 
-    # we will save our database as a CSV file.
-    db.to_csv(filename)
+
+
 
 
 if __name__ == '__main__':
@@ -83,17 +82,34 @@ if __name__ == '__main__':
     auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
     api = tweepy.API(auth)
 
-
     # Enter Hashtag and initial date
     print("Enter Twitter HashTag to search for")
-    # words = input()
-    words = "FRA"
-    print("Enter Date since The Tweets are required in yyyy-mm--dd")
-    # date_since = input()
-    from_date = "201709200000"
-    to_date = "201709300000"
+    words = input()
+
     # number of tweets you want to extract in one run
     numtweet = 100
-    scrape(words, from_date, to_date, numtweet)
-    print('Scraping has completed!')
 
+    # change date to appropriate time frame
+    start_date = datetime.date(2017, 6, 14)
+    end_date = datetime.date(2019, 1, 15)
+    delta = datetime.timedelta(days=15)
+
+    # Creating DataFrame using pandas
+    db = pd.DataFrame(columns=['username', 'description', 'location', 'following',
+                               'followers', 'totaltweets', 'retweetcount', 'text', 'hashtags', 'created_at'])
+
+    # loop through the entire year
+    while start_date <= end_date:
+        from_date = start_date.isoformat()
+        # format date
+        from_date = from_date.replace("-", '') + "0000"
+        start_date += delta
+        to_date = start_date.isoformat()
+        # format date
+        to_date = to_date.replace("-", '') + "0000"
+        scrape(words, from_date, to_date, numtweet, db)
+
+    filename = 'scraped_tweets.csv'
+    # we will save our database as a CSV file.
+    db.to_csv(filename)
+    print('Scraping has completed!')
