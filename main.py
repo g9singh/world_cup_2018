@@ -12,8 +12,8 @@ c.Pandas = True
 twint.run.Search(c)
 
 Tweets_df = twint.storage.panda.Tweets_df
-max_num_of_followers = 100
-true_fans = get_list_of_fans.get_true_fans(Tweets_df)
+max_num_of_followers = 200
+true_fans = get_list_of_fans.get_true_fans(Tweets_df, max_num_of_followers)
 print(true_fans)
 true_fans.to_csv('results.csv')
 print('Scraping has completed!')
