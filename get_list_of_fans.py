@@ -12,11 +12,8 @@ def get_true_fans(list_of_world_cup_tweeters, max_num_of_followers):
                      "LFC", "MCFC", "NUFCofficial", "NorwichCityFC", "officialQPR", "officialSCFC",
                      "SAFCofficial",
                      "SpursOfficial", "WBAFCofficial", "LaticsOfficial", "OfficialWolves"]
-    world_cup_tag = ['FIFAWorldCup', 'FIFA']
+    world_cup_tag = set(['FIFAWorldCup', 'FIFA'])
     set_of_teams = set(list_of_teams)
-    intersection_terms = set(set_of_teams)
-    intersection_terms.add('FIFAWorldCup')
-    intersection_terms.add('FIFA')
 
     i = 0
     for user in list_of_world_cup_tweeters.username:
@@ -34,7 +31,7 @@ def get_true_fans(list_of_world_cup_tweeters, max_num_of_followers):
             print("user is " + user)
             print(list_of_following)
 
-            if set(list_of_following) & intersection_terms:
+            if (set(list_of_following) & set_of_teams) & (set(list_of_following) & world_cup_tag):
                 list_of_world_cup_tweeters.at[list_of_world_cup_tweeters['username'] == user, 'fan'] = True
 
             else:
