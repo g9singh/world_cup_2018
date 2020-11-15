@@ -1,7 +1,4 @@
 # import modules
-import datetime
-
-import pandas as pd
 import twint
 import get_list_of_fans
 
