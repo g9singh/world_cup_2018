@@ -41,23 +41,23 @@ def get_true_fans(list_of_world_cup_tweeters, max_num_of_followers):
         i = i + 1
     return list_of_world_cup_tweeters
 
-#
-# # this function grabs 100 users who follow FIFAWorldCup
-# def get_wc_followers():
-#     c = twint.Config()
-#     c.Username = "FIFAWorldCup"
-#     c.Pandas = True
-#     c.Limit = 100
-#     twint.run.Followers(c)
-#
-#     followers_df = twint.storage.panda.Follow_df
-#     if "followers" in followers_df.columns:
-#         list_of_followers = followers_df['followers']['FIFAWorldCup']
-#         print(len(list_of_followers))
-#         return list_of_followers
-#     return []
 
-# list_of_WC_Followers = get_wc_followers()
-# list_of_true_fans = get_true_fans(list_of_WC_Followers)
-# print(list_of_true_fans)
-# list_of_true_fans.to_csv("fans.csv")
+# this function grabs 100 users who follow FIFAWorldCup
+def get_wc_followers():
+    c = twint.Config()
+    c.Username = "FIFAWorldCup"
+    c.Pandas = True
+    c.Limit = 100
+    twint.run.Followers(c)
+
+    followers_df = twint.storage.panda.Follow_df
+    if "followers" in followers_df.columns:
+        list_of_followers = followers_df['followers']['FIFAWorldCup']
+        print(len(list_of_followers))
+        return list_of_followers
+    return []
+
+list_of_WC_Followers = get_wc_followers()
+list_of_true_fans = get_true_fans(list_of_WC_Followers)
+print(list_of_true_fans)
+list_of_true_fans.to_csv("fans.csv")
